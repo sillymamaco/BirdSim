@@ -85,8 +85,8 @@ class Simulation:
         self.state = "menu"
         self.running = True
         self.show_dots = False
-        self.font = p.font.Font("Chewy-Regular.ttf", 30)
-        self.bird_imgs = [p.image.load(f"bird_{i}.png").convert_alpha() for i in range(1, 6)]
+        self.font = p.font.Font("PressStart2P-Regular.ttf", 30)
+        self.bird_imgs = [p.image.load(f"birdo{i}.png").convert_alpha() for i in range(1, 6)]
         
         # High quality backgrounds scaled once
         self.backgrounds = {}
@@ -104,33 +104,61 @@ class Simulation:
                 if e.key == p.K_TAB: self.state = "menu"
                 if e.key == p.K_a: self.state = "explanation"
                 if e.key == p.K_SPACE: self.show_dots = not self.show_dots
-                if e.key == p.K_d: 
+                if e.key == p.K_b: 
                     self.state = "simulation"
                     if not self.birds: self.birds.append(Bird(SCREEN_WIDTH//2, SCREEN_HEIGHT//2, self.bird_imgs, True))
-                if e.key == p.K_e and len(self.birds) < 100:
+                if e.key == p.K_e and len(self.birds) < 20:
                     self.birds.append(Bird(random.randint(50, SCREEN_WIDTH-50), random.randint(50, SCREEN_HEIGHT-50), self.bird_imgs))
                 elif e.key == p.K_e: self.state = "warning"
                 if e.key == p.K_x: self.state = "simulation"
                 if e.key == p.K_ESCAPE: self.running = False
-            if e.type == p.MOUSEBUTTONDOWN and self.state == "explanation":
-                webbrowser.open(self.url)
-
+                if e.type == p.MOUSEBUTTONDOWN and self.state == "explanation":
+                    webbrowser.open(self.url)
+                # In Simulation.run()
+                
     def run(self):
         while self.running:
+            # Draw the background for the current state
             self.handle_events()
             if self.state in ["simulation", "warning"]:
                 for b in self.birds: b.update(self.birds)
+            bg=self.backgrounds.get(self.state, self.backgrounds["menu"])
+            self.screen.blit(bg, (0, 0))
+            if self.state == "explanation":
+                lines = [
+                    "BirdSim is an interactive ",
+                    "app simulating flock ",
+                    "movement, inspired by ",
+                    "nature as in the link",
+                    "below.",
+                    "",
+                    "ORIGINS",
+                    "Made by sillymamaco",
+                    "Bird sprites by Alfred",
+                    "Idea by sillymamaco ",
+                    "and two friends",
+                    "",
+                    "Press Esc to close the app",
+                    "and Tab to go back ",
+                    "to the menu!"
+                ]
+
+                for i, line in enumerate(lines):
+                    text_surf = self.font.render(line, True, (82, 75, 36)) 
+                    self.screen.blit(text_surf, (250, 135 + (i * 35)))
             
-            self.screen.blit(self.backgrounds.get(self.state, self.backgrounds["menu"]), (0, 0))
-            
-            if self.state in ["simulation", "warning"]:
+            elif self.state in ["simulation", "warning"]:
                 for b in self.birds: b.draw(self.screen, self.show_dots)
-                count_txt = self.font.render(str(len(self.birds)), True, (255, 145, 77))
-                self.screen.blit(count_txt, (1200, 320))
-            
+                count_txt = self.font.render(str(len(self.birds)), True, (82, 75, 36))
+                self.screen.blit(count_txt, (1100, 350))
+                if self.state == "warning":
+                    lines ="BIRD OVERLOAD!", "AAAAH NO MORE BIRDS!!!" 
+                    for i, line in enumerate(lines):   
+                        warning = self.font.render(line, True, (172, 50, 50))
+                        self.screen.blit(warning, (200 - ( i *35), 100 + (i * 35)))      
             p.display.flip()
             self.clock.tick(60)
-        p.quit()
+    p.quit()
 
 if __name__ == "__main__":
     Simulation().run()
