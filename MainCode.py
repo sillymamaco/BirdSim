@@ -31,7 +31,8 @@ class Bird:
                     
                     if d < hard_radius:
                         push = (self.pos - o.pos)
-                        if push.length() == 0: #move away randomly if they are on top of each other
+#move away randomly if they are on top of each other                       
+if push.length() == 0: 
                             push = p.math.Vector2(random.uniform(-1, 1), random.uniform(-1, 1))
                         self.pos += push.normalize() * 2
                         self.speed.reflect_ip(push.normalize())
@@ -79,7 +80,7 @@ class Bird:
 class Simulation:
     def __init__(self):
         p.init()
-        # Fullscreen + Scaled for Wayland support
+       
         self.screen = p.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), p.FULLSCREEN | p.SCALED)
         self.clock = p.time.Clock()
         self.state = "menu"
@@ -88,7 +89,7 @@ class Simulation:
         self.font = p.font.Font("PressStart2P-Regular.ttf", 30)
         self.bird_imgs = [p.image.load(f"birdo{i}.png").convert_alpha() for i in range(1, 6)]
         
-        # High quality backgrounds scaled once
+       
         self.backgrounds = {}
         for k in ["menu", "simulation", "explanation", "warning"]:
             img = p.image.load(f"{k}.png").convert()
@@ -114,11 +115,10 @@ class Simulation:
                 if e.key == p.K_ESCAPE: self.running = False
                 if e.type == p.MOUSEBUTTONDOWN and self.state == "explanation":
                     webbrowser.open(self.url)
-                # In Simulation.run()
+                
                 
     def run(self):
         while self.running:
-            # Draw the background for the current state
             self.handle_events()
             if self.state in ["simulation", "warning"]:
                 for b in self.birds: b.update(self.birds)
