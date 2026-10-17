@@ -1,4 +1,14 @@
-This is my first ever project. 
-The program that tries to emulate bird flight patterns as a flock. 
-The idea (and first version of the project) came from a project I made on highschool with two friends, that are now disconnected from the programming field.
-The new version of the birds was drawn by j-ricardo-goncalves (Alfred_4) and all the other assets and all the code was made by me and myself only.
+# Flocking Simulation
+
+A personal Python project focused on graphical simulation.
+
+## Overview
+A graphical simulation that emulates bird flight patterns and flocking behavior.
+
+## Key Features
+- **Graphical Rendering:** Renders a visual environment for the birds to interact in.
+- **Custom Assets:** Designed and integrated custom visual assets (sprites/backgrounds) to build a cohesive application.
+- **Iterative Development:** Started as a high school concept and was rebuilt from scratch into a fully functional Python program.
+
+## Technologies
+- Python
